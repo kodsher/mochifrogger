@@ -25,11 +25,105 @@
             color: white;
             font-family: 'Arial', sans-serif;
         }
+        #copyButton {
+            position: absolute;
+            top: 100px;
+            left: 10px;
+            font-size: 24px;
+            padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
     <div id="title">MICHI DESTROYER</div>
     <div id="score">0 michi's destroyed</div>
+    <button id="copyButton" onclick="copyCode()">Copy Code</button>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.133.1/build/three.min.js"></script>
+    <script>
+        function copyCode() {
+            const code = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michi Destroyer</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 36px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 2px 2px 4px #000;
+        }
+        #score {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            font-size: 24px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        #copyButton {
+            position: absolute;
+            top: 100px;
+            left: 10px;
+            font-size: 24px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">MICHI DESTROYER</div>
+    <div id="score">0 michi's destroyed</div>
+    <button id="copyButton" onclick="copyCode()">Copy Code</button>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.133.1/build/three.min.js"></script>
+    <script>
+        function copyCode() {
+            const code = \`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michi Destroyer</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 36px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 2px 2px 4px #000;
+        }
+        #score {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            font-size: 24px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        #copyButton {
+            position: absolute;
+            top: 100px;
+            left: 10px;
+            font-size: 24px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">MICHI DESTROYER</div>
+    <div id="score">0 michi's destroyed</div>
+    <button id="copyButton" onclick="copyCode()">Copy Code</button>
     <script src="https://cdn.jsdelivr.net/npm/three@0.133.1/build/three.min.js"></script>
     <script>
         // Scene, Camera, Renderer setup
@@ -151,53 +245,6 @@
                 new THREE.Vector3(0, 1, 0),   // Up
                 new THREE.Vector3(0, -1, 0),  // Down
                 new THREE.Vector3(1, 1, 0).normalize(),   // Diagonal Up-Right
-                new THREE.Vector3(-1, 1, 0).normalize(),  // Diagonal Up-Left
-                new THREE.Vector3(1, -1, 0).normalize(),  // Diagonal Down-Right
-                new THREE.Vector3(-1, -1, 0).normalize()  // Diagonal Down-Left
-            ];
-            directions.forEach(direction => {
-                lasers.push({ laser: createLaser(position, direction), direction });
-            });
-        }
+                new THREE.Vector3(-1, 1, 0).Let's complete the previous code and ensure the Michi texture has a transparent background. Here's the full implementation, including a copy button to copy the code:
 
-        // Animation Loop
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Update player position
-            if (movement.left) player.position.x -= playerSpeed;
-            if (movement.up) player.position.y += playerSpeed;
-            if (movement.right) player.position.x += playerSpeed;
-            if (movement.down) player.position.y -= playerSpeed;
-
-            // Spin the player
-            player.rotation.x += 0.01;
-            player.rotation.y += 0.01;
-
-            // Collision detection and laser shooting
-            obstacles.forEach((obstacle, index) => {
-                if (player.position.distanceTo(obstacle.position) < 0.5) {
-                    score += 1;
-                    scoreElement.innerText = `${score} michi's destroyed`;
-                    scene.remove(obstacle);
-                    obstacles.splice(index, 1);
-                    addObstacle();
-                    shootLasers(player.position);
-                }
-            });
-
-            // Animate lasers
-            lasers.forEach((laserObj, index) => {
-                laserObj.laser.position.add(laserObj.direction.clone().multiplyScalar(0.2));
-                if (Math.abs(laserObj.laser.position.x) > 10 || Math.abs(laserObj.laser.position.y) > 10) {
-                    scene.remove(laserObj.laser);
-                    lasers.splice(index, 1);
-                }
-            });
-
-            renderer.render(scene, camera);
-        }
-        animate();
-    </script>
-</body>
-</html>
+### Complete Updated Game Code with Copy Button
