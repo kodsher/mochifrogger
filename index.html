@@ -99,6 +99,36 @@
         document.addEventListener('keydown', onDocumentKeyDown, false);
         document.addEventListener('keyup', onDocumentKeyUp, false);
 
+        // Laser Geometry and Material
+        const laserGeometry = new THREE.BoxGeometry(0.1, 0.1, 1);
+        const laserMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+
+        function createLaser(position, direction) {
+            const laser = new THREE.Mesh(laserGeometry, laserMaterial);
+            laser.position.copy(position);
+            laser.rotation.z = Math.atan2(direction.y, direction.x);
+            scene.add(laser);
+            return laser;
+        }
+
+        const lasers = [];
+
+        function shootLasers(position) {
+            const directions = [
+                new THREE.Vector3(1, 0, 0),   // Right
+                new THREE.Vector3(-1, 0, 0),  // Left
+                new THREE.Vector3(0, 1, 0),   // Up
+                new THREE.Vector3(0, -1, 0),  // Down
+                new THREE.Vector3(1, 1, 0).normalize(),   // Diagonal Up-Right
+                new THREE.Vector3(-1, 1, 0).normalize(),  // Diagonal Up-Left
+                new THREE.Vector3(1, -1, 0).normalize(),  // Diagonal Down-Right
+                new THREE.Vector3(-1, -1, 0).normalize()  // Diagonal Down-Left
+            ];
+            directions.forEach(direction => {
+                lasers.push({ laser: createLaser(position, direction), direction });
+            });
+        }
+
         // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
@@ -113,7 +143,7 @@
             player.rotation.x += 0.01;
             player.rotation.y += 0.01;
 
-            // Collision detection
+            // Collision detection and laser shooting
             obstacles.forEach((obstacle, index) => {
                 if (player.position.distanceTo(obstacle.position) < 0.5) {
                     score += 10;
@@ -121,6 +151,16 @@
                     scene.remove(obstacle);
                     obstacles.splice(index, 1);
                     addObstacle();
+                    shootLasers(player.position);
+                }
+            });
+
+            // Animate lasers
+            lasers.forEach((laserObj, index) => {
+                laserObj.laser.position.add(laserObj.direction.multiplyScalar(0.1));
+                if (Math.abs(laserObj.laser.position.x) > 10 || Math.abs(laserObj.laser.position.y) > 10) {
+                    scene.remove(laserObj.laser);
+                    lasers.splice(index, 1);
                 }
             });
 
