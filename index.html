@@ -229,8 +229,6 @@
                     const direction = new THREE.Vector3().subVectors(obstacle.position, player.position).normalize();
                     obstacle.position.add(direction.multiplyScalar(0.05));
                 }
-           
-                }
             });
 
             // Collision detection and laser shooting
