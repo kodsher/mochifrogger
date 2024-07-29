@@ -114,17 +114,12 @@
             addObstacle();
         }
 
-        // Flashing Circle
-        const circleGeometry = new THREE.CircleGeometry(0.3, 32);
-        const circleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        const circle = new THREE.Mesh(circleGeometry, circleMaterial);
-        circle.position.set(Math.random() * 10 - 5, Math.random() * 10 - 5, 0);
-        scene.add(circle);
-
-        function moveCircle() {
-            circle.position.set(Math.random() * 10 - 5, Math.random() * 10 - 5, 0);
-        }
-        setInterval(moveCircle, 2000);
+        // Red Sphere (Chasing Enemy)
+        const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+        const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.position.set(Math.random() * 10 - 5, Math.random() * 10 - 5, 0);
+        scene.add(sphere);
 
         // Lighting
         const light = new THREE.AmbientLight(0x404040);
@@ -140,6 +135,7 @@
         // Player Controls
         const playerSpeed = 0.1;
         const michiSpeed = playerSpeed * 0.75;
+        const sphereSpeed = michiSpeed * 0.5;
         const movement = { left: false, up: false, right: false, down: false };
 
         function onDocumentKeyDown(event) {
@@ -223,19 +219,21 @@
             player.rotation.x += 0.01;
             player.rotation.y += 0.01;
 
-            // Move michis away from mochi
+            // Move michis away from mochi and keep within boundaries
             obstacles.forEach(obstacle => {
                 const distance = player.position.distanceTo(obstacle.position);
                 if (distance < 3) {
                     const direction = new THREE.Vector3().subVectors(obstacle.position, player.position).normalize();
                     obstacle.position.add(direction.multiplyScalar(michiSpeed));
+                    obstacle.positionContinuing the updated code to ensure that `michis` cannot move outside the window and the red sphere chases `mochi` at half the speed of `michis`:
+                    obstacle.position.x = Math.max(Math.min(obstacle.position.x, 10), -10);
+                    obstacle.position.y = Math.max(Math.min(obstacle.position.y, 10), -10);
                 }
             });
 
             // Collision detection and laser shooting
             obstacles.forEach((obstacle, index) => {
-                if (player.position.distanceToContinuing the code to ensure that `mochi` cannot move outside the window boundaries:
-                obstacle.position) < 0.5) {
+                if (player.position.distanceTo(obstacle.position) < 0.5) {
                     score += 1;
                     scoreElement.innerText = `${score} michi's destroyed`;
                     scene.remove(obstacle);
@@ -254,8 +252,14 @@
                 }
             });
 
-            // Flashing circle collision detection
-            if (player.position.distanceTo(circle.position) < 0.5) {
+            // Red sphere chasing player and staying within boundaries
+            const directionToPlayer = new THREE.Vector3().subVectors(player.position, sphere.position).normalize();
+            sphere.position.add(directionToPlayer.multiplyScalar(sphereSpeed));
+            sphere.position.x = Math.max(Math.min(sphere.position.x, 10), -10);
+            sphere.position.y = Math.max(Math.min(sphere.position.y, 10), -10);
+
+            // Flashing sphere collision detection
+            if (player.position.distanceTo(sphere.position) < 0.5) {
                 remainingLives -= 1;
                 if (remainingLives >= 0) {
                     livesContainer.removeChild(lives[remainingLives]);
@@ -264,7 +268,6 @@
                     alert("Game Over!");
                     document.location.reload();
                 }
-                moveCircle();
             }
 
             renderer.render(scene, camera);
