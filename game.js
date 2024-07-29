@@ -20,17 +20,19 @@ const logWidth = 60;
 const logHeight = 20;
 const carSpeed = 2;
 const logSpeed = 1.5;
-const numCars = 3;
+const numCars = 2; // Reduced the number of cars per row
 const numLogs = 2;
 const carRows = 3;
 const logRows = 2;
+const carRowSpacing = 80; // Increased the vertical spacing between car rows
+const logRowSpacing = 40;
 
 function initCars() {
     for (let row = 0; row < carRows; row++) {
         for (let i = 0; i < numCars; i++) {
             cars.push({
                 x: -carWidth - Math.random() * canvas.width,
-                y: canvas.height - 100 - row * 40,
+                y: canvas.height - 100 - row * carRowSpacing,
                 width: carWidth,
                 height: carHeight,
                 dx: carSpeed + Math.random() * 2,
@@ -44,7 +46,7 @@ function initLogs() {
         for (let i = 0; i < numLogs; i++) {
             logs.push({
                 x: -logWidth - Math.random() * canvas.width,
-                y: row * 40 + 20,
+                y: row * logRowSpacing + 20,
                 width: logWidth,
                 height: logHeight,
                 dx: logSpeed + Math.random() * 1.5,
@@ -104,13 +106,13 @@ function detectCollision() {
         if (frog.x < log.x + log.width &&
             frog.x + frog.width > log.x &&
             frog.y < log.y + log.height &&
-            frog.y + frog.height > log.y) {
+            frog.y + log.height > log.y) {
             onLog = true;
             frog.x += log.dx; // Move the frog with the log
         }
     });
 
-    if (frog.y < (logRows * 40 + 20) && !onLog) {
+    if (frog.y < (logRows * logRowSpacing + 20) && !onLog) {
         resetFrog();
     }
 }
