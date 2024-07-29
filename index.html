@@ -139,6 +139,7 @@
 
         // Player Controls
         const playerSpeed = 0.1;
+        const michiSpeed = playerSpeed * 0.75;
         const movement = { left: false, up: false, right: false, down: false };
 
         function onDocumentKeyDown(event) {
@@ -213,10 +214,10 @@
             requestAnimationFrame(animate);
 
             // Update player position
-            if (movement.left) player.position.x -= playerSpeed;
-            if (movement.up) player.position.y += playerSpeed;
-            if (movement.right) player.position.x += playerSpeed;
-            if (movement.down) player.position.y -= playerSpeed;
+            if (movement.left) player.position.x = Math.max(player.position.x - playerSpeed, -10);
+            if (movement.up) player.position.y = Math.min(player.position.y + playerSpeed, 10);
+            if (movement.right) player.position.x = Math.min(player.position.x + playerSpeed, 10);
+            if (movement.down) player.position.y = Math.max(player.position.y - playerSpeed, -10);
 
             // Spin the player
             player.rotation.x += 0.01;
@@ -227,13 +228,14 @@
                 const distance = player.position.distanceTo(obstacle.position);
                 if (distance < 3) {
                     const direction = new THREE.Vector3().subVectors(obstacle.position, player.position).normalize();
-                    obstacle.position.add(direction.multiplyScalar(0.05));
+                    obstacle.position.add(direction.multiplyScalar(michiSpeed));
                 }
             });
 
             // Collision detection and laser shooting
             obstacles.forEach((obstacle, index) => {
-                if (player.position.distanceTo(obstacle.position) < 0.5) {
+                if (player.position.distanceToContinuing the code to ensure that `mochi` cannot move outside the window boundaries:
+                obstacle.position) < 0.5) {
                     score += 1;
                     scoreElement.innerText = `${score} michi's destroyed`;
                     scene.remove(obstacle);
