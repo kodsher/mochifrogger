@@ -8,7 +8,9 @@ const frog = {
     height: 20,
     dx: 20,
     dy: 20,
+    image: new Image(),
 };
+frog.image.src = 'mochi.png';
 
 const cars = [];
 const logs = [];
@@ -52,8 +54,7 @@ function initLogs() {
 }
 
 function drawFrog() {
-    ctx.fillStyle = 'green';
-    ctx.fillRect(frog.x, frog.y, frog.width, frog.height);
+    ctx.drawImage(frog.image, frog.x, frog.y, frog.width, frog.height);
 }
 
 function drawCars() {
@@ -149,6 +150,8 @@ function moveFrog(e) {
 
 document.addEventListener('keydown', moveFrog);
 
-initCars();
-initLogs();
-update();
+frog.image.onload = () => {
+    initCars();
+    initLogs();
+    update();
+};
