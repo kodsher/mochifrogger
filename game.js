@@ -18,7 +18,7 @@ const carWidth = 40;
 const carHeight = 20;
 const logWidth = 60;
 const logHeight = 20;
-const carSpeed = 2;
+const carSpeed = 1; // Reduced the base car speed
 const logSpeed = 1.5;
 const numCars = 2; // Reduced the number of cars per row
 const numLogs = 2;
@@ -35,7 +35,7 @@ function initCars() {
                 y: canvas.height - 100 - row * carRowSpacing,
                 width: carWidth,
                 height: carHeight,
-                dx: carSpeed + Math.random() * 2,
+                dx: carSpeed + Math.random(), // Adjusted to ensure slower speed
             });
         }
     }
