@@ -3,15 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js Game</title>
+    <title>Michi Destroyer</title>
     <style>
         body { margin: 0; }
         canvas { display: block; }
-        #score { position: absolute; top: 10px; left: 10px; font-size: 24px; color: white; }
+        #title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 36px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 2px 2px 4px #000;
+        }
+        #score {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            font-size: 24px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
     </style>
 </head>
 <body>
-    <div id="score">Score: 0</div>
+    <div id="title">MICHI DESTROYER</div>
+    <div id="score">0 michi's destroyed</div>
     <script src="https://cdn.jsdelivr.net/npm/three@0.133.1/build/three.min.js"></script>
     <script>
         // Scene, Camera, Renderer setup
@@ -22,9 +40,10 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Load texture
+        // Load textures
         const textureLoader = new THREE.TextureLoader();
         const mochiTexture = textureLoader.load('mochi.png');
+        const michiTexture = textureLoader.load('michi.png');
 
         // Create stars in the background
         function createStars() {
@@ -47,7 +66,7 @@
         // Obstacles
         const obstacles = [];
         const obstacleGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const obstacleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const obstacleMaterial = new THREE.MeshBasicMaterial({ map: michiTexture });
 
         function addObstacle() {
             const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
@@ -158,8 +177,8 @@
             // Collision detection and laser shooting
             obstacles.forEach((obstacle, index) => {
                 if (player.position.distanceTo(obstacle.position) < 0.5) {
-                    score += 10;
-                    scoreElement.innerText = `Score: ${score}`;
+                    score += 1;
+                    scoreElement.innerText = `${score} michi's destroyed`;
                     scene.remove(obstacle);
                     obstacles.splice(index, 1);
                     addObstacle();
