@@ -22,9 +22,13 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
+        // Load texture
+        const textureLoader = new THREE.TextureLoader();
+        const mochiTexture = textureLoader.load('mochi.png');
+
         // Player (Cube)
         const playerGeometry = new THREE.BoxGeometry();
-        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const playerMaterial = new THREE.MeshBasicMaterial({ map: mochiTexture });
         const player = new THREE.Mesh(playerGeometry, playerMaterial);
         scene.add(player);
 
@@ -61,16 +65,16 @@
         function onDocumentKeyDown(event) {
             switch (event.keyCode) {
                 case 37: // left arrow
-                    movement.up = true;
+                    movement.left = true;
                     break;
                 case 38: // up arrow
-                    movement.right = true;
+                    movement.up = true;
                     break;
                 case 39: // right arrow
-                    movement.down = true;
+                    movement.right = true;
                     break;
                 case 40: // down arrow
-                    movement.left = true;
+                    movement.down = true;
                     break;
             }
         }
@@ -78,16 +82,16 @@
         function onDocumentKeyUp(event) {
             switch (event.keyCode) {
                 case 37: // left arrow
-                    movement.up = false;
+                    movement.left = false;
                     break;
                 case 38: // up arrow
-                    movement.right = false;
+                    movement.up = false;
                     break;
                 case 39: // right arrow
-                    movement.down = false;
+                    movement.right = false;
                     break;
                 case 40: // down arrow
-                    movement.left = false;
+                    movement.down = false;
                     break;
             }
         }
