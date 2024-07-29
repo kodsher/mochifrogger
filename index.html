@@ -66,7 +66,7 @@
         // Obstacles
         const obstacles = [];
         const obstacleGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const obstacleMaterial = new THREE.MeshBasicMaterial({ map: michiTexture });
+        const obstacleMaterial = new THREE.MeshBasicMaterial({ map: michiTexture, transparent: true });
 
         function addObstacle() {
             const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
