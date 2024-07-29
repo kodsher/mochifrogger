@@ -2,10 +2,10 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const frog = {
-    x: canvas.width / 2 - 10,
-    y: canvas.height - 20,
-    width: 20,
-    height: 20,
+    x: canvas.width / 2 - 30,
+    y: canvas.height - 60,
+    width: 60,
+    height: 60,
     dx: 20,
     dy: 20,
     image: new Image(),
@@ -116,8 +116,8 @@ function detectCollision() {
 }
 
 function resetFrog() {
-    frog.x = canvas.width / 2 - 10;
-    frog.y = canvas.height - 20;
+    frog.x = canvas.width / 2 - 30;
+    frog.y = canvas.height - 60;
 }
 
 function update() {
