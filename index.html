@@ -26,6 +26,18 @@
         const textureLoader = new THREE.TextureLoader();
         const mochiTexture = textureLoader.load('mochi.png');
 
+        // Create stars in the background
+        function createStars() {
+            const starGeometry = new THREE.SphereGeometry(0.05, 24, 24);
+            const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            for (let i = 0; i < 200; i++) {
+                const star = new THREE.Mesh(starGeometry, starMaterial);
+                star.position.set(Math.random() * 20 - 10, Math.random() * 20 - 10, Math.random() * 20 - 10);
+                scene.add(star);
+            }
+        }
+        createStars();
+
         // Player (Cube)
         const playerGeometry = new THREE.BoxGeometry();
         const playerMaterial = new THREE.MeshBasicMaterial({ map: mochiTexture });
@@ -100,8 +112,8 @@
         document.addEventListener('keyup', onDocumentKeyUp, false);
 
         // Laser Geometry and Material
-        const laserGeometry = new THREE.BoxGeometry(0.1, 0.1, 1);
-        const laserMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const laserGeometry = new THREE.CylinderGeometry(0.05, 0.05, 1, 32);
+        const laserMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
         function createLaser(position, direction) {
             const laser = new THREE.Mesh(laserGeometry, laserMaterial);
@@ -157,7 +169,7 @@
 
             // Animate lasers
             lasers.forEach((laserObj, index) => {
-                laserObj.laser.position.add(laserObj.direction.multiplyScalar(0.1));
+                laserObj.laser.position.add(laserObj.direction.clone().multiplyScalar(0.2));
                 if (Math.abs(laserObj.laser.position.x) > 10 || Math.abs(laserObj.laser.position.y) > 10) {
                     scene.remove(laserObj.laser);
                     lasers.splice(index, 1);
