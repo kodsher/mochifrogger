@@ -3,24 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frogger Game</title>
+    <title>Three.js Game</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #eee;
-        }
-        canvas {
-            border: 2px solid #000;
-            background: url('background.png') no-repeat center center;
-            background-size: cover;
-        }
+        body { margin: 0; }
+        canvas { display: block; }
+        #score { position: absolute; top: 10px; left: 10px; font-size: 24px; color: white; }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <script src="game.js"></script>
+    <div id="score">Score: 0</div>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.133.1/build/three.min.js"></script>
+    <script>
+        // Scene, Camera, Renderer setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Player (Cube)
+        const playerGeometry = new THREE.BoxGeometry();
+        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const player = new THREE.Mesh(playerGeometry, playerMaterial);
+        scene.add(player);
+
+        // Obstacles
+        const obstacles = [];
+        const obstacleGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+        const obstacleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
+        function addObstacle() {
+            const obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
+            obstacle.position.set(Math.random() * 10 - 5, Math.random() * 10 - 5, 0);
+            scene.add(obstacle);
+            obstacles.push(obstacle);
+        }
+
+        for (let i = 0; i < 10; i++) {
+            addObstacle();
+        }
+
+        // Lighting
+        const light = new THREE.AmbientLight(0x404040);
+        scene.add(light);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        scene.add(directionalLight);
+
+        // Score
+        let score = 0;
+        const scoreElement = document.getElementById('score');
+
+        // Player Controls
+        const playerSpeed = 0.1;
+        const movement = { left: false, up: false, right: false, down: false };
+
+        function onDocumentKeyDown(event) {
+            switch (event.keyCode) {
+                case 37: // left arrow
+                    movement.up = true;
+                    break;
+                case 38: // up arrow
+                    movement.right = true;
+                    break;
+                case 39: // right arrow
+                    movement.down = true;
+                    break;
+                case 40: // down arrow
+                    movement.left = true;
+                    break;
+            }
+        }
+
+        function onDocumentKeyUp(event) {
+            switch (event.keyCode) {
+                case 37: // left arrow
+                    movement.up = false;
+                    break;
+                case 38: // up arrow
+                    movement.right = false;
+                    break;
+                case 39: // right arrow
+                    movement.down = false;
+                    break;
+                case 40: // down arrow
+                    movement.left = false;
+                    break;
+            }
+        }
+
+        document.addEventListener('keydown', onDocumentKeyDown, false);
+        document.addEventListener('keyup', onDocumentKeyUp, false);
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update player position
+            if (movement.left) player.position.x -= playerSpeed;
+            if (movement.up) player.position.y += playerSpeed;
+            if (movement.right) player.position.x += playerSpeed;
+            if (movement.down) player.position.y -= playerSpeed;
+
+            // Spin the player
+            player.rotation.x += 0.01;
+            player.rotation.y += 0.01;
+
+            // Collision detection
+            obstacles.forEach((obstacle, index) => {
+                if (player.position.distanceTo(obstacle.position) < 0.5) {
+                    score += 10;
+                    scoreElement.innerText = `Score: ${score}`;
+                    scene.remove(obstacle);
+                    obstacles.splice(index, 1);
+                    addObstacle();
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
 </body>
 </html>
